@@ -8,7 +8,7 @@
      let system = "x86_64-linux"; in
      let nixpkgs = import nixpkgs-git { config = { allowUnfree = true;}; system = system; }; in
 
-     let mypackages = with nixpkgs; [ coreutils ]; in
+     let mypackages = with nixpkgs; [ coreutils python3 ]; in
 
      with import nixpkgs-git { system = "x86_64-linux"; };
      symlinkJoin {
