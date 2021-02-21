@@ -1,7 +1,7 @@
 {
   description = "";
   inputs = {
-    nixpkgs-git.url = https://github.com/NixOS/nixpkgs/archive/60330b60655b3fa3a18624bdd7069855bb37af99.tar.gz; # was: 62ef779f2a5050549772722665bedf52f01268d2
+    nixpkgs-git.url = https://github.com/NixOS/nixpkgs/archive/58c19a2b0bbf75e68b1946460737c3f8a74b0f33.tar.gz;
   };
   outputs = { nixpkgs-git, ... }@inputs : {
    defaultPackage.x86_64-linux =
