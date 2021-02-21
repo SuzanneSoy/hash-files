@@ -62,7 +62,7 @@ def recur(depth, x):
   #print(x)
   # initial list of paths
   if isinstance(x, list):
-    print("ROOT " + str(depth) + ' ' + x, file=sys.stderr)
+    print("ROOT " + str(depth) + ' [' + ', '.join(x) + ']', file=sys.stderr)
     return b'root\0' + b''.join(recur(depth + 1, os.path.abspath(path)) + b'  ' + path.encode('utf-8') + b'\0' for path in sorted(x))
   # GIT repo
   elif is_git(x):
