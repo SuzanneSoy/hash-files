@@ -8,9 +8,9 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     os.mkdir(tempdir+'/test/foo')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'dc99f8161ccf245e178102a00264e4f4f43cd0048ea525b6c9e226777414352f':
-        print("test passed: empty", flush=True)
+        print("test passed: empty\n", flush=True)
     else:
-        print("TEST FAILED: empty: got hash " + repr(h), flush=True)
+        print("TEST FAILED: empty: got hash " + repr(h) + "\n", flush=True)
         exit(1)
 
 # Plain text file
@@ -20,9 +20,9 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     os.system('echo a > '+tempdir+'/test/foo/x')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'6b393b2233479ccc54975f83f4de0d39592d5ab78cd02b19597e7bbe97f43cf1':
-        print("test passed: plain text file", flush=True)
+        print("test passed: plain text file\n", flush=True)
     else:
-        print("TEST FAILED: plain text file: got hash " + repr(h), flush=True)
+        print("TEST FAILED: plain text file: got hash " + repr(h) + "\n", flush=True)
         exit(1)
 
 # Plain text file and empty folder in subdirectory
@@ -34,10 +34,10 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     os.mkdir(tempdir+'/test/foo/baz/quux')
     os.system('echo a > '+tempdir+'/test/foo/baz/titi')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
-    if h == b'7421373b28f6a1929228a3bd7ecb23123d25da36c9bbe41518c7a6252f351712':
-        print("test passed: plain text and empty folder in subdirectory", flush=True)
+    if h == b'0bb2f31bf05eb215ebef32abcc62cddbfad2d8b0a1221bb335da0acaf3455558':
+        print("test passed: plain text and empty folder in subdirectory\n", flush=True)
     else:
-        print("TEST FAILED: plain text and empty folder in subdirectory: got hash " + repr(h), flush=True)
+        print("TEST FAILED: plain text and empty folder in subdirectory: got hash " + repr(h) + "\n", flush=True)
         exit(1)
 
 # Git directories
@@ -57,11 +57,11 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     os.system('cd '+tempdir+'/test/foo/baz/git_workdir && git push ../git_bare branchname --quiet')
     os.system('echo a > '+tempdir+'/test/foo/baz/titi')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
-    if h == b'8a84206ece36f07d2c408e565ec506bab407d6e1c645eb4a5c7d057049956110':
-        print("test passed: git", flush=True)
+    if h == b'f31eb7e1bcb25e79be0d1305d58eeadbe3fd9bf38ecbd0449789e8c91b5f4340':
+        print("test passed: git\n", flush=True)
         subprocess.check_output("tar -zcf /tmp/debug-git.tar.gz .", cwd=tempdir, shell=True)
     else:
-        print("TEST FAILED: git: got hash " + repr(h), flush=True)
+        print("TEST FAILED: git: got hash " + repr(h) + "\n", flush=True)
         subprocess.check_output("tar -zcf /tmp/debug-git.tar.gz .", cwd=tempdir, shell=True)
         exit(0)
 
@@ -94,11 +94,11 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     #os.system('sqlite3 '+tempdir+'/test/foo/baz/db "vacuum;"')
     os.system('echo a > '+tempdir+'/test/foo/baz/titi')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
-    if h == b'c04f602dcb7eec19433c12981f58d653c61ac7453da60e375f2f5587dc57f474':
-        print("test passed: sqlite", flush=True)
+    if h == b'b775b5c3ad1b403c08fa88e43be42bd76143f93c26bf42cb8881c595161a5509':
+        print("test passed: sqlite\n", flush=True)
         subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
     else:
-        print("TEST FAILED: sqlite got hash " + repr(h), flush=True)
+        print("TEST FAILED: sqlite got hash " + repr(h) + "\n", flush=True)
         subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
         exit(0)
 
@@ -131,10 +131,10 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     #os.system('sqlite3 '+tempdir+'/test/foo/baz/db "vacuum;"')
     os.system('echo a > '+tempdir+'/test/foo/baz/titi')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
-    if h == b'b0aae011d0e438a78d6e2652478ec667b7650b9c29dc6d7235ccce26a75c95cb':
-        print("test passed: sqlite big table", flush=True)
+    if h == b'7d6917fef222456552b6359ddc4eee235a0cdca089c0a6d9b4b2f6a747987eb9':
+        print("test passed: sqlite big table\n", flush=True)
         subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
     else:
-        print("TEST FAILED: sqlite big table got hash " + repr(h), flush=True)
+        print("TEST FAILED: sqlite big table got hash " + repr(h) + "\n", flush=True)
         subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
         exit(0)
