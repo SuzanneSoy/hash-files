@@ -22,7 +22,7 @@ jobs:
       - name: Run tests
         run: PATH="$PWD/result/bin:$PATH" ./test.py
       - name: Run tests
-        run: PATH="$PWD/result/bin:$PATH" ./test.py
+        run: PATH="$PWD/result/bin" ./test.py
       - uses: actions/upload-artifact@v2
         with:
           name: debug.tar.gz
