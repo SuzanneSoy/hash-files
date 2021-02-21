@@ -34,5 +34,5 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
         print("test passed")
     else:
         print("TEST FAILED: got hash " + repr(h))
-        print(subprocess.check_output("tar -Jcf- . | xxd", cwd=tempdir, shell=True))
+        print(subprocess.check_output("tar -Jcf /tmp/debug.tar.xz", cwd=tempdir, shell=True))
         exit(1)
