@@ -19,10 +19,24 @@ jobs:
             experimental-features = nix-command flakes
       - name: build dependencies
         run: nix build path://$PWD/
+
+      - name: python3 --version
+        run: PATH="$PWD/result/bin" python3 --version
+      - name: awk --version
+        run: PATH="$PWD/result/bin" awk --version
+      - name: sh --version
+        run: PATH="$PWD/result/bin" sh --version
+      - name: sha256sum --version
+        run: PATH="$PWD/result/bin" sha256sum --version
+      - name: sqlite3 --version
+        run: PATH="$PWD/result/bin" sqlite3 --version
+      - name: git --version
+        run: PATH="$PWD/result/bin" git --version
+
       - name: Run tests
-        run: PATH="$PWD/result/bin:$PATH" ./test.py
+        run: PATH="$PWD/result/bin" python3 ./test.py
       - name: Run tests
-        run: PATH="$PWD/result/bin" ./test.py
+        run: PATH="$PWD/result/bin" python3 ./test.py
       - uses: actions/upload-artifact@v2
         with:
           name: debug-git.tar.gz
