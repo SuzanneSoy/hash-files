@@ -5,7 +5,8 @@ import sys
 import subprocess
 
 def debug(s):
-  print(s, file=sys.stderr, flush=True)
+  #print(s, file=sys.stderr, flush=True)
+  pass
 
 
 def hashFile(filename):

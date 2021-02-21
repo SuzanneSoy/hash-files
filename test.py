@@ -59,11 +59,9 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'f31eb7e1bcb25e79be0d1305d58eeadbe3fd9bf38ecbd0449789e8c91b5f4340':
         print("test passed: git\n", flush=True)
-        subprocess.check_output("tar -zcf /tmp/debug-git.tar.gz .", cwd=tempdir, shell=True)
     else:
         print("TEST FAILED: git: got hash " + repr(h) + "\n", flush=True)
-        subprocess.check_output("tar -zcf /tmp/debug-git.tar.gz .", cwd=tempdir, shell=True)
-        exit(0)
+        exit(1)
 
 # Sqlite
 with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
@@ -96,11 +94,9 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'b775b5c3ad1b403c08fa88e43be42bd76143f93c26bf42cb8881c595161a5509':
         print("test passed: sqlite\n", flush=True)
-        subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
     else:
         print("TEST FAILED: sqlite got hash " + repr(h) + "\n", flush=True)
-        subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
-        exit(0)
+        exit(1)
 
 # Sqlite big table
 with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
