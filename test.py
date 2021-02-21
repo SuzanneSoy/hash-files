@@ -2,6 +2,47 @@
 
 import os, subprocess, tempfile
 
+# Plain text file and empty folder
+with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
+    os.mkdir(tempdir+'/test')
+    os.mkdir(tempdir+'/test/foo')
+    os.mkdir(tempdir+'/test/foo/bar')
+    os.mkdir(tempdir+'/test/foo/baz')
+    os.mkdir(tempdir+'/test/foo/baz/quux')
+    os.system('echo a > '+tempdir+'/test/foo/baz/titi')
+    h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
+    if h == b'7421373b28f6a1929228a3bd7ecb23123d25da36c9bbe41518c7a6252f351712':
+        print("test passed")
+    else:
+        print("TEST FAILED: got hash " + repr(h))
+        exit(1)
+
+# Git directories
+with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
+    os.mkdir(tempdir+'/test')
+    os.mkdir(tempdir+'/test/foo')
+    os.mkdir(tempdir+'/test/foo/bar')
+    os.mkdir(tempdir+'/test/foo/baz')
+    os.mkdir(tempdir+'/test/foo/baz/quux')
+    os.system('git init '+tempdir+'/test/foo/baz/git_workdir -b branchname --quiet')
+    os.system('git init '+tempdir+'/test/foo/baz/git_workdir_empty -b branchname --quiet')
+    os.system('git init --bare '+tempdir+'/test/foo/baz/git_bare -b branchname --quiet')
+    os.system('git init --bare '+tempdir+'/test/foo/baz/git_bare_empty -b branchname --quiet')
+    os.system('cd '+tempdir+'/test/foo/baz/git_workdir && echo a > toto')
+    os.system('cd '+tempdir+'/test/foo/baz/git_workdir && git add toto')
+    os.system('cd '+tempdir+'/test/foo/baz/git_workdir&& GIT_COMMITTER_DATE="Sun Feb 21 18:00 2020 +0000" GIT_AUTHOR_NAME="Suzanne Soy" GIT_AUTHOR_EMAIL="example@suzanne.soy" GIT_COMMITTER_NAME="Suzanne Soy" GIT_COMMITTER_EMAIL="example@suzanne.soy" git commit -m "example commit for tests" --date="Sun Feb 21 18:00 2020 +0000" --quiet')
+    os.system('cd '+tempdir+'/test/foo/baz/git_workdir && git push ../git_bare branchname --quiet')
+    os.system('echo a > '+tempdir+'/test/foo/baz/titi')
+    h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
+    if h == b'8a84206ece36f07d2c408e565ec506bab407d6e1c645eb4a5c7d057049956110':
+        print("test passed")
+        print(subprocess.check_output("tar -zcf /tmp/debug-git.tar.gz .", cwd=tempdir, shell=True))
+    else:
+        print("TEST FAILED: got hash " + repr(h))
+        print(subprocess.check_output("tar -zcf /tmp/debug-git.tar.gz .", cwd=tempdir, shell=True))
+        exit(0)
+
+# Sqlite
 with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     os.mkdir(tempdir+'/test')
     os.mkdir(tempdir+'/test/foo')
@@ -32,8 +73,8 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'e8e0e538fa2a79a6c03d5575734bb77ee8c8734b07201d3d7dfc289c118d81a4':
         print("test passed")
-        print(subprocess.check_output("tar -zcf /tmp/debug.tar.gz .", cwd=tempdir, shell=True))
+        print(subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True))
     else:
         print("TEST FAILED: got hash " + repr(h))
-        print(subprocess.check_output("tar -zcf /tmp/debug.tar.gz .", cwd=tempdir, shell=True))
+        print(subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True))
         exit(0)
