@@ -37,14 +37,8 @@ def hashGit(path):
   HEAD       =       "HEAD" if ref_exists(path,       "HEAD") else ''
   return subprocess.check_output(['sh', '-c', git_command.format(HEAD=HEAD, FETCH_HEAD=FETCH_HEAD)], cwd=path)
 
-sqlite3_command='''
-  (
-    sqlite3 file.db .dump | sort | sha256sum --binary --zero
-  )
-'''
-
 def hashSqlite3(path):
-  pass # TODO…
+  return subprocess.check_output(['sh', '-c', 'sqlite3 "$1" .dump | sort | sha256sum --binary --zero', '--', os.path.abspath(path)])
 
 def ignore_exitcode(cmd, **kwargs):
   try:
@@ -69,7 +63,9 @@ def recur(x):
     return hash1(b'git-versioned folder\0' + hashGit(x))
   # directory
   elif os.path.isdir(x):
-   return hash1(b'directory\0' + b''.join(recur(os.path.join(x, entry)) + b'  ' + entry.encode('utf-8') + b'\0' for entry in os.listdir(x)))
+    return hash1(b'directory\0' + b''.join(recur(os.path.join(x, entry)) + b'  ' + entry.encode('utf-8') + b'\0' for entry in os.listdir(x)))
+  elif b'SQLite 3.x database' in subprocess.check_output(["file", x]):
+    return hashSqlite3(x)
   # Just a file
   elif os.path.isfile(x):
     return hashFile(x)

@@ -25,5 +25,9 @@ jobs:
         run: PATH="$PWD/result/bin" ./test.py
       - uses: actions/upload-artifact@v2
         with:
-          name: debug.tar.gz
-          path: /tmp/debug.tar.gz
+          name: debug-git.tar.gz
+          path: /tmp/debug-git.tar.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: debug-sql.tar.gz
+          path: /tmp/debug-sql.tar.gz
