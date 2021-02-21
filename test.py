@@ -32,7 +32,8 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'e8e0e538fa2a79a6c03d5575734bb77ee8c8734b07201d3d7dfc289c118d81a4':
         print("test passed")
+        print(subprocess.check_output("tar -zcf /tmp/debug.tar.gz .", cwd=tempdir, shell=True))
     else:
         print("TEST FAILED: got hash " + repr(h))
-        print(subprocess.check_output("tar -Jcf /tmp/debug.tar.xz .", cwd=tempdir, shell=True))
+        print(subprocess.check_output("tar -zcf /tmp/debug.tar.gz .", cwd=tempdir, shell=True))
         exit(0)

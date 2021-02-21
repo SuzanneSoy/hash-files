@@ -21,7 +21,9 @@ jobs:
         run: nix build path://$PWD/
       - name: Run tests
         run: PATH="$PWD/result/bin:$PATH" ./test.py
+      - name: Run tests
+        run: PATH="$PWD/result/bin:$PATH" ./test.py
       - uses: actions/upload-artifact@v2
         with:
-          name: debug
-          path: /tmp/debug.tar.xz
+          name: debug.tar.gz
+          path: /tmp/debug.tar.gz
