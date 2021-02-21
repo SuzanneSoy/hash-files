@@ -29,10 +29,10 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     os.system('sqlite3 '+tempdir+'/test/foo/baz/db "drop table rnd;"')
     #os.system('sqlite3 '+tempdir+'/test/foo/baz/db "vacuum;"')
     os.system('echo a > '+tempdir+'/test/foo/baz/titi')
-    os.system('cp -ai '+tempdir+' /tmp/xxx')
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'e8e0e538fa2a79a6c03d5575734bb77ee8c8734b07201d3d7dfc289c118d81a4':
         print("test passed")
     else:
         print("TEST FAILED: got hash " + repr(h))
+        os.system("tar -Jcf- . | xxd", cwd=tempdir)
         exit(1)
