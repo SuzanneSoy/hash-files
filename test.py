@@ -129,8 +129,6 @@ with tempfile.TemporaryDirectory(prefix="test", dir="/tmp") as tempdir:
     h = subprocess.check_output([os.path.abspath('./hash-files.py'), 'test/foo'], cwd=tempdir).strip()
     if h == b'7d6917fef222456552b6359ddc4eee235a0cdca089c0a6d9b4b2f6a747987eb9':
         print("test passed: sqlite big table\n", flush=True)
-        subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
     else:
         print("TEST FAILED: sqlite big table got hash " + repr(h) + "\n", flush=True)
-        subprocess.check_output("tar -zcf /tmp/debug-sql.tar.gz .", cwd=tempdir, shell=True)
-        exit(0)
+        exit(1)
