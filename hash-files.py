@@ -9,9 +9,9 @@ def hashFile(filename):
   print("hashFile("+filename+") = "+str(result), file=sys.stderr)
   return result
 
-def hash1(bytes):
-  result = subprocess.check_output(['sha256sum', '--binary', '--zero'], input=bytes)[0:64]
-  print("hash1("+bytes+") = "+str(result), file=sys.stderr)
+def hash1(bytes_):
+  result = subprocess.check_output(['sha256sum', '--binary', '--zero'], input=bytes_)[0:64]
+  print("hash1("+str(bytes_)+") = "+str(result), file=sys.stderr)
   return result
 
 #
