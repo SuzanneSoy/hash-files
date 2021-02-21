@@ -34,9 +34,9 @@ jobs:
         run: PATH="$PWD/result/bin" git --version
 
       - name: Run tests
-        run: PATH="$PWD/result/bin" python3 ./test.py
+        run: PATH="$PWD/result/bin" python3 ./test.py 2>&1
       - name: Run tests
-        run: PATH="$PWD/result/bin" python3 ./test.py
+        run: PATH="$PWD/result/bin" python3 ./test.py 2>&1
       - uses: actions/upload-artifact@v2
         with:
           name: debug-git.tar.gz
