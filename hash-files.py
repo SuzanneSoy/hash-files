@@ -6,12 +6,12 @@ import subprocess
 
 def hashFile(filename):
   result = subprocess.check_output(['sha256sum', '--binary', '--zero', filename])[0:64]
-  print("hashFile("+x+") = "+str(result), file=sys.stderr)
+  print("hashFile("+filename+") = "+str(result), file=sys.stderr)
   return result
 
 def hash1(bytes):
   result = subprocess.check_output(['sha256sum', '--binary', '--zero'], input=bytes)[0:64]
-  print("hash1("+x+") = "+str(result), file=sys.stderr)
+  print("hash1("+bytes+") = "+str(result), file=sys.stderr)
   return result
 
 #
@@ -38,12 +38,12 @@ def hashGit(path):
   FETCH_HEAD = "FETCH_HEAD" if ref_exists(path, "FETCH_HEAD") else ''
   HEAD       =       "HEAD" if ref_exists(path,       "HEAD") else ''
   result = subprocess.check_output(['sh', '-c', git_command.format(HEAD=HEAD, FETCH_HEAD=FETCH_HEAD)], cwd=path)
-  print("hashGit("+x+") = "+str(result), file=sys.stderr)
+  print("hashGit("+path+") = "+str(result), file=sys.stderr)
   return result
 
 def hashSqlite3(path):
   result= subprocess.check_output(['sh', '-c', 'sqlite3 "$1" .dump | sort | sha256sum --binary --zero', '--', os.path.abspath(path)])
-  print("hashSqlite3("+x+") = "+str(result), file=sys.stderr)
+  print("hashSqlite3("+path+") = "+str(result), file=sys.stderr)
   return result
 
 def ignore_exitcode(cmd, **kwargs):
