@@ -24,11 +24,13 @@ def hash1(bytes_):
 git_command='''
   (
     (
-      git log --format=%P --all {HEAD} {FETCH_HEAD} | tr ' ' \\n | grep -v '^$' | sort -u | sed -e 'p;p';
-      git rev-parse {HEAD} {FETCH_HEAD} --all | sort -u
-    ) | sort | uniq -u;
+      git log --format=%P --all {HEAD} {FETCH_HEAD} | tr ' ' \\n | grep -v '^$' | LC_ALL=C sort -u | sed -e 'p;p';
+      git rev-parse {HEAD} {FETCH_HEAD} --all | LC_ALL=C sort -u
+    ) | LC_ALL=C sort | uniq -u;
     for ref in {HEAD} {FETCH_HEAD}; do echo "$(git rev-parse $ref) $ref"; done; git for-each-ref --format='%(objectname) %(refname)'
-  ) | sort | awk 'BEGIN {{ h="" }} {{ if (length($0) == 40) {{ h=$0 }} else {{ if (substr($0,1,40) == h) print $0 }} }}' | sort -k 2
+  ) | LC_ALL=C sort \
+    | awk 'BEGIN {{ h="" }} {{ if (length($0) == 40) {{ h=$0 }} else {{ if (substr($0,1,40) == h) print $0 }} }}' \
+    | LC_ALL=C sort -k 2
 '''
 
 def ref_exists(path, ref):
@@ -46,7 +48,7 @@ def hashGit(path):
   return result
 
 def hashSqlite3(path):
-  result= subprocess.check_output(['sh', '-c', 'sqlite3 "$1" .dump | sort | sha256sum --binary --zero', '--', os.path.abspath(path)])
+  result= subprocess.check_output(['sh', '-c', 'sqlite3 "$1" .dump | LC_ALL=C sort | sha256sum --binary --zero', '--', os.path.abspath(path)])
   debug("hashSqlite3("+path+") = "+str(result))
   return result
 
@@ -74,7 +76,7 @@ def recur(depth, x):
   # directory
   elif os.path.isdir(x):
     debug("DIR " + str(depth) + ' ' + x)
-    return hash1(b'directory\0' + b''.join(recur(depth + 1, os.path.join(x, entry)) + b'  ' + entry.encode('utf-8') + b'\0' for entry in os.listdir(x)))
+    return hash1(b'directory\0' + b''.join(recur(depth + 1, os.path.join(x, entry)) + b'  ' + entry.encode('utf-8') + b'\0' for entry in sorted(os.listdir(x))))
   elif b'SQLite 3.x database' in subprocess.check_output(["file", x]):
     debug("SQLITE3 " + str(depth) + ' ' + x)
     return hashSqlite3(x)
